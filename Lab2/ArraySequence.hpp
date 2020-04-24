@@ -7,7 +7,7 @@
 using namespace DynArray;
 
 namespace Sequences {
-	template <class T> class ArraySequence : Sequence<T> {
+	template <class T> class ArraySequence : public Sequence<T> {
 	private:
 		DynamicArray<T>* arr;
 		int curSize;
@@ -45,7 +45,7 @@ namespace Sequences {
 		T Get(int index) override {
 			return arr->Get(index);
 		}
-		ArraySequence<T>* GetSubsequence(int startIndex, int endIndex) override {
+		Sequence<T>* GetSubsequence(int startIndex, int endIndex) override {
 
 			if ((startIndex <= endIndex) && (startIndex >= 0) && (endIndex < curSize)) {
 				ArraySequence<T>* sub = new ArraySequence();
@@ -96,11 +96,39 @@ namespace Sequences {
 		}
 		Sequence<T>* Concat(Sequence<T>* list) override {
 			ArraySequence<T>* bigArr = new ArraySequence(*this);
-			ArraySequence<T>* arr2 = dynamic_cast<ArraySequence<T>*>(list);
-			for (int i = 0; i < arr2->GetLength(); i++) {
-				bigArr->Append(arr2->Get(i));
+			for (int i = 0; i < list->GetLength(); i++) {
+				bigArr->Append(list->Get(i));
 			}
-			return nullptr;
+			return bigArr;
+		}
+		template <class T1> Sequence<T1>* Map(T1(*f)(T))
+		{
+			ArraySequence<T1>* newArr = new ArraySequence<T1>();
+			for (int i = 0; i < this->GetLength(); i++) {
+				newArr->Append(f(this->Get(i)));
+			}
+			return newArr;
+		}
+		Sequence<T>* Where(bool(*f)(T)) override
+		{
+			ArraySequence<T>* newList = new ArraySequence<T>();
+			T cur;
+			for (int i = 0; i < this->GetLength(); i++) {
+				cur = this->Get(i);
+				if (f(cur))
+					newList->Append(cur);
+			}
+			return newList;
+		}
+		T Reduce(T(*f)(T, T), T c) override
+		{
+			T arrayItem;
+			T funcResult = c;
+			for (int i = 0; i < this->GetLength(); i++) {
+				arrayItem = this->Get(i);
+				funcResult = f(arrayItem, funcResult);
+			}
+			return funcResult;
 		}
 	};
 }

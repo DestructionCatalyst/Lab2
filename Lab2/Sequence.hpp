@@ -19,5 +19,9 @@ namespace Sequences {
 		virtual void Prepend(T item) = 0;
 		virtual void InsertAt(T item, int index) = 0;
 		virtual Sequence<T>* Concat(Sequence<T>* list) = 0;
+
+		template <class T1> Sequence<T1>* Map(T1(*f)(T));//!!!!!
+		virtual Sequence<T>* Where(bool(*f)(T)) = 0;
+		virtual T Reduce(T(*f)(T, T), T) = 0;
 	};
 }
