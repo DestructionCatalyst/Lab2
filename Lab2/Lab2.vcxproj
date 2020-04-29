@@ -123,11 +123,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Complex.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArraySequence.hpp" />
+    <ClInclude Include="Complex.hpp" />
     <ClInclude Include="DynamicArray.hpp" />
     <ClInclude Include="LinkedList.hpp" />
     <ClInclude Include="ListSequence.hpp" />
