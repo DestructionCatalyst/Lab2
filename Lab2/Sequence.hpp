@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 
 namespace Sequences {
 	template <class T> class Sequence {
@@ -20,8 +21,9 @@ namespace Sequences {
 		virtual void InsertAt(T item, int index) = 0;
 		virtual Sequence<T>* Concat(Sequence<T>* list) = 0;
 
-		template <class T1> Sequence<T1>* Map(T1(*f)(T));//!!!!!
-		virtual Sequence<T>* Where(bool(*f)(T)) = 0;
-		virtual T Reduce(T(*f)(T, T), T) = 0;
+		virtual Sequence<T>* Map(std::function<T(T)> f) = 0;
+		virtual Sequence<T>* Where(std::function<bool(T)> f) = 0;
+		virtual T Reduce(std::function<T(T, T)> f, T) = 0;
+		//virtual Sequence<T>* Zip(T(*f)(T, T), Sequence<T>* seq) = 0;
 	};
 }

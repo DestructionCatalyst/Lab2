@@ -1,7 +1,8 @@
 #pragma once
+#include <functional>
 #include "LinkedList.hpp"
 #include "Sequence.hpp"
-
+#define min(num1, num2) num1<num2?num1:num2
 
 using namespace List;
 
@@ -30,13 +31,8 @@ namespace Sequences {
 
 		}
 		ListSequence(ListSequence<T>& newList)
-			:Sequence<T>()
-		{
-			list = new LinkedList<T>();
-			for (int i = 0; i < newList.GetLength(); i++)
-				list->Append(newList.Get(i));
-			
-		}
+			:Sequence<T>(), list(newList.list)
+		{}
 		//Decomposition
 		T GetFirst() override
 		{
@@ -79,15 +75,15 @@ namespace Sequences {
 			}
 			return bigList;
 		}
-		template <class T1> Sequence<T1>* Map(T1(*f)(T))
+		Sequence<T>* Map(std::function<T(T)> f)
 		{
-			ListSequence<T1>* newList = new ListSequence<T1>();
+			ListSequence<T>* newList = new ListSequence<T>();
 			for (int i = 0; i < this->GetLength(); i++) {
 				newList->Append(f(this->Get(i)));
 			}
 			return newList;
 		}
-		Sequence<T>* Where(bool(*f)(T)) override
+		Sequence<T>* Where(std::function<bool(T)> f) override
 		{
 			ListSequence<T>* newList = new ListSequence<T>();
 			T cur;
@@ -98,7 +94,7 @@ namespace Sequences {
 			}
 			return newList;
 		}
-		T Reduce(T(*f)(T, T), T c) override
+		T Reduce(std::function<T(T, T)> f, T c) override
 		{
 			T listItem;
 			T funcResult = c;
@@ -108,5 +104,20 @@ namespace Sequences {
 			}
 			return funcResult;
 		}
+		/*
+		Sequence<T>* Zip(T(*f)(T, T), Sequence<T>* seq) override
+		{
+			ListSequence<T>* newList = new ListSequence<T>();
+			if (this->GetLength() == seq->GetLength()) {
+				for (int i = 0; i < this->GetLength(); i++) {
+					newList->Append(f(this->Get(i), seq->Get(i)));
+				}
+			}
+			else throw out_of_range("Zipping 2 sequences with different length!");
+
+			return newList;
+		}
+		*/
 	};
 }
+

@@ -1,7 +1,9 @@
 #pragma once
 #include "DynamicArray.hpp"
 #include "Sequence.hpp"
+#include <functional>
 #define DEFAULT_SIZE 8
+#define min(num1, num2) num1<num2?num1:num2
 
 
 using namespace DynArray;
@@ -14,6 +16,7 @@ namespace Sequences {
 	public:
 		
 		//Creation
+
 		ArraySequence(T* items, int count)
 			:Sequence<T>()
 		{
@@ -27,15 +30,11 @@ namespace Sequences {
 			curSize = 0;
 		}
 		ArraySequence(ArraySequence<T>& array)
-			:Sequence<T>()
-		{
-			arr = new DynamicArray<T>(array.GetLength());
-			for (int i = 0; i < array.GetLength(); i++)
-				arr->Set(i, array.Get(i));
-			curSize = array.GetLength();
-		}
+			:Sequence<T>(), arr(array.arr), curSize(array.curSize)
+		{}
 
 		//Decomposition
+
 		T GetFirst() override {
 			return arr->Get(0);
 		}
@@ -61,6 +60,7 @@ namespace Sequences {
 			return curSize;
 		}
 		//Operations
+
 		void Append(T item) override {
 			if (curSize >= arr->GetSize()) {
 				arr->Resize(arr->GetSize() * 2);
@@ -101,15 +101,15 @@ namespace Sequences {
 			}
 			return bigArr;
 		}
-		template <class T1> Sequence<T1>* Map(T1(*f)(T))
+		Sequence<T>* Map(std::function<T(T)> f)
 		{
-			ArraySequence<T1>* newArr = new ArraySequence<T1>();
+			ArraySequence<T>* newArr = new ArraySequence<T>();
 			for (int i = 0; i < this->GetLength(); i++) {
 				newArr->Append(f(this->Get(i)));
 			}
 			return newArr;
 		}
-		Sequence<T>* Where(bool(*f)(T)) override
+		Sequence<T>* Where(std::function<bool(T)> f) override
 		{
 			ArraySequence<T>* newList = new ArraySequence<T>();
 			T cur;
@@ -120,7 +120,7 @@ namespace Sequences {
 			}
 			return newList;
 		}
-		T Reduce(T(*f)(T, T), T c) override
+		T Reduce(std::function<T(T, T)> f, T c) override
 		{
 			T arrayItem;
 			T funcResult = c;
@@ -130,5 +130,19 @@ namespace Sequences {
 			}
 			return funcResult;
 		}
+		/*
+		Sequence<T>* Zip(T(*f)(T, T), Sequence<T>* seq) override
+		{
+			ArraySequence<T>* newList = new ArraySequence<T>();
+			if (this->GetLength() == seq->GetLength()) {
+				for (int i = 0; i < this->GetLength(); i++) {
+					newList->Append(f(this->Get(i), seq->Get(i)));
+				}
+			}
+			else throw out_of_range("Zipping 2 sequences with different length!");
+			
+			return newList;
+		}
+		*/
 	};
 }

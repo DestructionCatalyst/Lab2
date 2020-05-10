@@ -2,3 +2,4 @@
 
 void testArraySequence();
 void testListSequence();
+void TestPolynom();

@@ -25,7 +25,8 @@ namespace List {
 			tail = nullptr;
 			length = 0;
 		}
-		LinkedList(LinkedList <T>& list) {
+		LinkedList(LinkedList <T>& list)
+		{
 
 			head = nullptr;
 			tail = nullptr;

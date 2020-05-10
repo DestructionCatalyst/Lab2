@@ -14,6 +14,7 @@ int main() {
 	
 	testArraySequence();
 	testListSequence();
+	TestPolynom();
 	
 	return 0;
 }

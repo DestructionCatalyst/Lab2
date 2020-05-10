@@ -134,6 +134,7 @@
     <ClInclude Include="LinkedList.hpp" />
     <ClInclude Include="ListSequence.hpp" />
     <ClInclude Include="Node.hpp" />
+    <ClInclude Include="Polynom.hpp" />
     <ClInclude Include="Sequence.hpp" />
     <ClInclude Include="Test.h" />
   </ItemGroup>
