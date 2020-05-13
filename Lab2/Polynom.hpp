@@ -2,6 +2,7 @@
 #include "Sequence.hpp"
 #include "ArraySequence.hpp"
 #include <memory>
+#include <string>
 #define abs(m) m>0?m:(-1)*m
 
 using namespace Sequences;
@@ -56,7 +57,7 @@ namespace Arithmetics {
 			string tmp = "0";//current item
 			for (int i = 0; i < this->GetLength(); i++) {
 				tmp = (string)Get(i);
-				//if (tmp != "0") {//If current element is not 0
+				if (tmp != "0") {//If current element is not 0
 					if (i == 0)
 						str = str + tmp;//If it has no x, print it like it is
 					else {
@@ -65,14 +66,14 @@ namespace Arithmetics {
 						str = str + tmp + "*(x^" + std::to_string(i) + ")";
 					}
 
-				//}
+				}
 			}
 			return str;
 		}
 
 		Polynom<T>* Add(Polynom<T>& poly)
 		{
-			std::cout << "Adding" << std::endl;
+			//std::cout << "Adding" << std::endl;
 			Polynom<T>* tmp = new Polynom<T>(*this);
 			Polynom<T>* polyPtr = new Polynom<T>(poly);
 			if (this->GetLength() < poly.GetLength()) {
@@ -80,18 +81,15 @@ namespace Arithmetics {
 				polyPtr = new Polynom<T>(*this);
 			}
 
-			int startLength = polyPtr->GetLength();
-
-			for (int i = 0; i <= tmp->GetLength() - startLength; i++) {
-				polyPtr->Expand();
-			}
-
-			//std::cout << "+--------" << (string)*polyPtr << polyPtr->GetLength() << std::endl;
-
 			Sequence<T>* sumSeq = new ArraySequence<T>();
-			for (int i = 0; i < tmp->GetLength(); i++) {
+			for (int i = 0; i < polyPtr->GetLength(); i++) {
 				sumSeq->Append(tmp->Get(i) + polyPtr->Get(i));
 			}
+
+			for (int i = polyPtr->GetLength(); i < tmp->GetLength(); i++) {
+				sumSeq->Append(tmp->Get(i));
+			}
+
 			return new Polynom(sumSeq);
 		}
 
@@ -102,7 +100,7 @@ namespace Arithmetics {
 
 		Polynom<T>* Multiply(T number)
 		{
-			std::cout << "Multiplying by " << (std::string)number << std::endl;
+			//std::cout << "Multiplying by " << (std::string)number << std::endl;
 			Sequence<T>* newCoef = coef->Map(
 				[number](T a) -> T
 				{
@@ -119,7 +117,7 @@ namespace Arithmetics {
 
 		Polynom<T>* CrossMultiply(Polynom<T>& poly)
 		{
-			std::cout << "Cross-multiplying" << std::endl;
+			//std::cout << "Cross-multiplying" << std::endl;
 			int n = this->GetLength();
 			int m = poly.GetLength();
 
@@ -141,7 +139,7 @@ namespace Arithmetics {
 		}
 		Polynom<T>* Composition(Polynom<T>& poly)
 		{
-			std::cout << "Composition" << std::endl;
+			//std::cout << "Composition" << std::endl;
 			int n = this->GetLength();
 			int m = poly.GetLength();
 

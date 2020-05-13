@@ -11,7 +11,7 @@ namespace DynArray {
 	private:
 
 		unique_ptr<T[]> el;
-		//T* el;
+		
 		int capacity;
 	public:
 
@@ -20,20 +20,12 @@ namespace DynArray {
 
 			capacity = size;
 			el = make_unique<T[]>(capacity);
-			//T* tmp = (T*)malloc(size * sizeof(T));
-			//if (tmp != nullptr)
-				//el = tmp;
-			//else throw bad_alloc();
 		}
 
 		DynamicArray(T* items, int count) {
 
 			capacity = count;
 			el = make_unique<T[]>(capacity);
-			//T* tmp = (T*)malloc(count * sizeof(T));
-			//if (tmp != nullptr)
-				//el = tmp;
-			//else throw bad_alloc();
 			memcpy(el.get(), items, count * sizeof(T));
 		}
 
@@ -41,11 +33,6 @@ namespace DynArray {
 
 			capacity = dynamicArray.GetSize();
 			el = make_unique<T[]>(capacity);
-			//T* tmp = (T*)malloc(capacity * sizeof(T));
-			//if (tmp != nullptr)
-				//el = tmp;
-			//else throw bad_alloc();
-			//el = tmp.get();
 			memcpy(el.get(), dynamicArray.el, capacity * sizeof(T));
 		}
 
@@ -80,15 +67,11 @@ namespace DynArray {
 
 			el.release();
 			el.reset(ptr_new);
-/*
-			unique_ptr<T[]> new_ptr = make_unique<T[]>(newSize);
-			auto old_ptr = el.release();
-			el.reset(new_ptr);
-			T* tmp = (T*)realloc(el.get(), newSize * sizeof(T));
-			if (tmp != nullptr)
-				el = tmp;
-			else 
-				throw bad_alloc();*/
+
+		}
+
+		~DynamicArray() {
+			el.reset();
 		}
 	};
 }

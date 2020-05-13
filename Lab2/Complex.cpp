@@ -1,7 +1,25 @@
 #include <cmath>
 #include <string>
 #include "Complex.hpp"
-#define optional(val) ((val==0.)?(""):(std::to_string(val))) 
+//#define optional(val) ((val==0.)?(""):(std::format("%g", val))) 
+
+
+
+std::string optional_string(double val) {
+	if (val == 0.) {
+		return "";
+	}
+	else {
+		std::string tmp = std::to_string(val);
+		if (tmp.find(".") != std::string::npos) {
+			tmp.erase(tmp.find_last_not_of("0") + 1);
+		}
+		if (tmp.ends_with("."))
+			tmp.erase(tmp.length() - 1);
+		return tmp;
+	}
+	
+}
 
 namespace Arithmetics {
 	//Creation
@@ -75,9 +93,9 @@ namespace Arithmetics {
 		if ((this->re == 0.) && (this->im == 0.))
 			return "0";
 		else
-			return "(" + optional(this->re)
+			return "(" + optional_string(this->re)
 			+ (((this->re != 0.) && (this->im != 0.)) ? " + " : "")
-			+ optional(this->im)
+			+ optional_string(this->im)
 			+ ((this->im != 0.) ? "*i" : "")
 			+ ")";
 	}

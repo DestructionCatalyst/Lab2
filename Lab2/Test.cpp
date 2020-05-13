@@ -142,11 +142,9 @@ void TestPolynom()
 	}
 	Polynom<Complex>* poly = new Polynom<Complex>(coef, 5);
 	Polynom<Complex>* poly1 = new Polynom<Complex>(coef1, 3);
-	cout << poly1->GetLength() << endl;
 	Polynom<Complex>* poly2 = new Polynom<Complex>();
 	*poly2 = *poly + *poly1;
 	cout << (string)*poly2 << endl;
-	cout << poly1->GetLength() << endl;
 
 	Polynom<Complex>* poly3 = new Polynom<Complex>();
 	*poly3 = *poly * Complex(2, 1);
