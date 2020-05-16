@@ -78,6 +78,8 @@ void testListSequence() {
 	list->InsertAt(2, 2);
 	list->InsertAt(100, 1);
 
+	cout << list->GetFirst() << " " << list->Get(1) << " " << list->Get(2) << " " << list->Get(3) << " " << list->GetLast() << endl;
+
 	ListSequence<int>* list2 = new ListSequence<int>(a, 5);
 	ListSequence<int>* subList = dynamic_cast<ListSequence<int>*>(list2->GetSubsequence(1, 3));
 	ListSequence<int>* list1 = new ListSequence<int>(*subList);
@@ -115,7 +117,7 @@ void testListSequence() {
 		, list5
 	));
 	*/
-	cout << list->GetFirst() << " " << list->Get(1) << " " << list->Get(2) << " " << list->Get(3) << " " << list->GetLast() << endl;
+
 	cout << list2->GetFirst() << " " << list2->Get(1) << " " << list2->Get(2) << " " << list2->Get(3) << " " << list2->GetLast() << endl;
 	cout << list3->GetFirst() << " " << list3->Get(1) << " " << list3->Get(2) << " " << list3->Get(3)
 		<< " " << list3->Get(4) << " " << list3->Get(5) << " " << list3->Get(6) << " " << list3->GetLast() << endl;
@@ -142,24 +144,25 @@ void TestPolynom()
 	}
 	Polynom<Complex>* poly = new Polynom<Complex>(coef, 5);
 	Polynom<Complex>* poly1 = new Polynom<Complex>(coef1, 3);
-	Polynom<Complex>* poly2 = new Polynom<Complex>();
-	*poly2 = *poly + *poly1;
+	Polynom<Complex>* poly2 = new Polynom<Complex>(*poly + *poly1);
+	//*poly2 = *poly + *poly1;
 	cout << (string)*poly2 << endl;
 
-	Polynom<Complex>* poly3 = new Polynom<Complex>();
-	*poly3 = *poly * Complex(2, 1);
+	Polynom<Complex>* poly3 = new Polynom<Complex>(*poly * Complex(2, 1));
+	//*poly3 = *poly * Complex(2, 1);
 	cout << (string)*poly3 << endl;
 
 	Complex coef2[2] = { Complex(-1), Complex(1) };
 	Complex coef3[2] = { Complex(2), Complex(1) };
 	Polynom<Complex>* poly4 = new Polynom<Complex>(coef2, 2);
 	Polynom<Complex>* poly45 = new Polynom<Complex>(coef3, 2);
-	Polynom<Complex>* poly5 = new Polynom<Complex>();
-	*poly5 = *poly4 * *poly45;
+	Polynom<Complex>* poly5 = new Polynom<Complex>((*poly4 * *poly45));
+	//*poly5 = *poly4 * *poly45;
 	cout << (string)*poly5 << endl;
 	cout << (string)((*poly) * (*poly1)) << endl;
 
-	Polynom<Complex>* poly7 = poly5->Composition(*poly4);
+	Polynom<Complex>* poly7 = new Polynom<Complex>(*poly5->Composition(*poly4));
 	cout << (string)*poly7 << endl;
 	cout << (string)*poly->Composition(*poly1) << endl;
+	cout << (string)poly5->Calculate(Complex(5, 7)) << endl;
 }

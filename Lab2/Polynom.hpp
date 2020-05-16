@@ -10,6 +10,7 @@ using namespace std;
 
 namespace Arithmetics {
 
+
 	template <class T> class Polynom {
 	private:
 		Sequence<T>* coef;
@@ -18,20 +19,20 @@ namespace Arithmetics {
 
 		Polynom()
 		{
-			coef = new ArraySequence<T>();
+			coef = new ListSequence<T>();
 		}
 		Polynom(T* arr, int len)
 		{
-			coef = new ArraySequence<T>(arr, len);
+			coef = new ListSequence<T>(arr, len);
 		}
 		Polynom(Sequence<T>* arr)
 		{
-			coef = new ArraySequence<T>();
+			coef = new ListSequence<T>();
 			for (int i = 0; i < arr->GetLength(); i++) {
 				coef->Append(arr->Get(i));
 			}
 		}
-		Polynom(Polynom<T>& poly):
+		Polynom(Polynom<T>& poly) :
 			coef(poly.coef)
 		{
 		}
@@ -45,7 +46,7 @@ namespace Arithmetics {
 		{
 			return coef->GetLength();
 		}
-		
+
 		//Operations
 
 		void Expand() {
@@ -81,7 +82,7 @@ namespace Arithmetics {
 				polyPtr = new Polynom<T>(*this);
 			}
 
-			Sequence<T>* sumSeq = new ArraySequence<T>();
+			Sequence<T>* sumSeq = new ListSequence<T>();
 			for (int i = 0; i < polyPtr->GetLength(); i++) {
 				sumSeq->Append(tmp->Get(i) + polyPtr->Get(i));
 			}
@@ -150,7 +151,7 @@ namespace Arithmetics {
 
 			Polynom<T>* res = new Polynom<T>(newCoef.get(), (m - 1) * (n - 1) + 1);
 			//std::cout << "-----" << (string)*res << res->GetLength() << std::endl;
-			Polynom<T>* cur = new Polynom<T>(); 
+			Polynom<T>* cur = new Polynom<T>();
 
 			for (int i = 1; i < n; i++) {
 				if (Get(i) != T()) {
@@ -163,8 +164,20 @@ namespace Arithmetics {
 					*res = *res + *cur;
 				}
 			}
-			
+
 			return new Polynom(*res);
 		}
+		T Calculate(T value) {
+			T res;
+			for (int i = 0; i < this->GetLength(); i++) {
+				res = res + Get(i) * power(value, i);
+			}
+			return res;
+		}
+		~Polynom()
+		{
+			//delete(coef);
+		}
 	};
+
 }

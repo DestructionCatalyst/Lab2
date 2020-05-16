@@ -1,5 +1,6 @@
 #include <cmath>
 #include <string>
+#include <stdexcept>
 #include "Complex.hpp"
 //#define optional(val) ((val==0.)?(""):(std::format("%g", val))) 
 
@@ -106,6 +107,17 @@ namespace Arithmetics {
 			return 0;
 		else 
 			return 1;
+	}
+	Complex power(Complex number, int power) {
+		if (power < 0)
+			throw std::invalid_argument("Negative powers not supported");
+		if (power = 0) 
+			return Complex(1);
+		Complex res = number;
+		for (int i = 1; i < power; i++) {
+			res = res * number;
+		}
+		return res;
 	}
 }
 

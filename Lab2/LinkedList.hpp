@@ -4,16 +4,14 @@
 namespace List {
 	template <class T> class LinkedList {
 	private:
-		Node<T>* head;
-		Node<T>* tail;
-		int length;
+		shared_ptr<Node<T>> head{ nullptr };
+		shared_ptr<Node<T>> tail{ nullptr };
+		int length{0};
 	public:
 		//Creation
 
 		LinkedList(T* items, int count) {
 
-			head = nullptr;
-			tail = nullptr;
 			length = 0;
 			for (int i = 0; i < count; i++) {
 				Append(items[i]);
@@ -39,10 +37,6 @@ namespace List {
 		}
 		//Decomposition
 
-		Node<T>* GetHead() {
-
-			return head;
-		}
 		T GetFirst() {
 
 			if(length != 0)
@@ -58,8 +52,8 @@ namespace List {
 		T Get(int index) {
 
 			if ((length != 0) && (index >= 0) && (index < length)) {
-				Node<T>* iter;
-				iter = head;
+				//Node<T>* iter;
+				shared_ptr<Node<T>> iter = head;
 				for (int i = 0; i < index; i++) {
 					iter = iter->GetNext();
 				}
@@ -72,7 +66,7 @@ namespace List {
 
 			if ((startIndex <= endIndex) && (startIndex >= 0) && (endIndex < length)) {
 				LinkedList<T>* subList = new LinkedList<T>();
-				Node<T>* iter = head;
+				shared_ptr<Node<T>> iter = head;
 				for (int i = 0; i < startIndex; i++)
 					iter = iter->GetNext();
 				for (int i = startIndex; i <= endIndex; i++) {
@@ -91,7 +85,8 @@ namespace List {
 		//Operations
 		void Append(T item) {
 
-			Node<T>* last = new Node<T>(item, nullptr);
+			//Node<T>* last = new Node<T>(item, shared_ptr<Node<T>>{ nullptr });
+			shared_ptr<Node<T>> last = make_shared<Node<T>>(Node<T>(item, shared_ptr<Node<T>>(nullptr)));
 			if (length == 0) {
 				tail = last;
 				head = tail;
@@ -104,7 +99,7 @@ namespace List {
 		}
 		void Prepend(T item) {
 
-			head = new Node<T>(item, head);
+			head = make_shared<Node<T>>(Node<T>(item, head));
 			if (length == 0)
 				tail = head;
 			++length;
@@ -115,9 +110,9 @@ namespace List {
 				Prepend(item);
 			else if (index == length)
 				Append(item);
-			else if ((index >0) && (index < length)){
-				Node<T>* iter;
-				iter = head;
+			else if ((index > 0) && (index < length)){
+
+				shared_ptr<Node<T>> iter = head;
 				for (int i = 0; i < index - 1; i++) {
 					iter = iter->GetNext();
 				}
@@ -131,15 +126,16 @@ namespace List {
 		LinkedList<T>* Concat(LinkedList<T>* list) {
 
 			LinkedList<T>* bigList = new LinkedList(*this);
-			Node<T>* iter = list->GetHead();
+			shared_ptr<Node<T>> iter = head;
 			for (int i = 0; i < list->GetLength(); i++) {
 				bigList->Append(iter->GetItem());
 				iter = iter->GetNext();
 			}
 			return bigList;
 		}
+
+		~LinkedList() {
+		}
 	};
-	
-	
 	
 }

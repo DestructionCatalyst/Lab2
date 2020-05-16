@@ -25,5 +25,7 @@ namespace Sequences {
 		virtual Sequence<T>* Where(std::function<bool(T)> f) = 0;
 		virtual T Reduce(std::function<T(T, T)> f, T) = 0;
 		//virtual Sequence<T>* Zip(T(*f)(T, T), Sequence<T>* seq) = 0;
+
+		virtual ~Sequence() {};
 	};
 }

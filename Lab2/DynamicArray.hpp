@@ -71,7 +71,6 @@ namespace DynArray {
 		}
 
 		~DynamicArray() {
-			el.reset();
 		}
 	};
 }

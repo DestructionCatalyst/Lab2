@@ -104,20 +104,11 @@ namespace Sequences {
 			}
 			return funcResult;
 		}
-		/*
-		Sequence<T>* Zip(T(*f)(T, T), Sequence<T>* seq) override
+		
+		~ListSequence()
 		{
-			ListSequence<T>* newList = new ListSequence<T>();
-			if (this->GetLength() == seq->GetLength()) {
-				for (int i = 0; i < this->GetLength(); i++) {
-					newList->Append(f(this->Get(i), seq->Get(i)));
-				}
-			}
-			else throw out_of_range("Zipping 2 sequences with different length!");
-
-			return newList;
+			delete(list);
 		}
-		*/
 	};
 }
 

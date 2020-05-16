@@ -26,5 +26,7 @@ namespace Arithmetics {
 		Complex operator / (Complex z);
 		int operator != (Complex z);
 		operator std::string();
+		~Complex(){}
 	};
+	Complex power(Complex number, int power);
 }
