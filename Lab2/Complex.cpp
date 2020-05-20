@@ -111,7 +111,7 @@ namespace Arithmetics {
 	Complex power(Complex number, int power) {
 		if (power < 0)
 			throw std::invalid_argument("Negative powers not supported");
-		if (power = 0) 
+		if (power == 0) 
 			return Complex(1);
 		Complex res = number;
 		for (int i = 1; i < power; i++) {

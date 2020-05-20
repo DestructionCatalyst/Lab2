@@ -61,6 +61,7 @@ namespace Sequences {
 		}
 		//Operations
 
+
 		void Append(T item) override {
 			if (curSize >= arr->GetSize()) {
 				arr->Resize(arr->GetSize() * 2);

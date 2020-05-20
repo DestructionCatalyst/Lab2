@@ -1,7 +1,9 @@
 #pragma once
 #include <cstdlib>
+#include <memory>
 #include <cstring>
 #include <exception>
+#include <algorithm>
 
 using namespace std;
 
@@ -59,14 +61,16 @@ namespace DynArray {
 		}
 
 		void Resize(int newSize) {
-			capacity = newSize;
-			T* ptr_new = (T*)realloc(el.get(), newSize * sizeof(T));
-			if (!ptr_new) {
-				throw bad_alloc();
+			
+			T* ptr_old = el.release();
+			
+			el = make_unique<T[]>(newSize);
+
+			for (int i = 0; i < min(capacity, newSize); i++) {
+				el[i] = ptr_old[i];
 			}
 
-			el.release();
-			el.reset(ptr_new);
+			capacity = newSize;
 
 		}
 

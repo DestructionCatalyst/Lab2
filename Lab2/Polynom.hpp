@@ -1,6 +1,7 @@
 #pragma once
 #include "Sequence.hpp"
 #include "ArraySequence.hpp"
+#include "Complex.hpp"
 #include <memory>
 #include <string>
 #define abs(m) m>0?m:(-1)*m
@@ -13,32 +14,34 @@ namespace Arithmetics {
 
 	template <class T> class Polynom {
 	private:
-		Sequence<T>* coef;
+		//Sequence<T>* coef;
+		T* coef;
 	public:
 		//Creation
 
 		Polynom()
 		{
-			coef = new ListSequence<T>();
+			//coef = new ListSequence<T>();
+			coef = new T();
 		}
-		Polynom(T* arr, int len)
+		Polynom(Complex* arr, int len)
 		{
-			coef = new ListSequence<T>(arr, len);
+			coef = new T(arr, len);
 		}
-		Polynom(Sequence<T>* arr)
+		Polynom(Sequence<Complex>* arr)
 		{
-			coef = new ListSequence<T>();
+			coef = new T();
 			for (int i = 0; i < arr->GetLength(); i++) {
 				coef->Append(arr->Get(i));
 			}
 		}
-		Polynom(Polynom<T>& poly) :
+		Polynom(const Polynom<T>& poly) :
 			coef(poly.coef)
 		{
 		}
 		//Decomposition
 
-		T Get(int index)
+		Complex Get(int index)
 		{
 			return coef->Get(index);
 		}
@@ -50,7 +53,7 @@ namespace Arithmetics {
 		//Operations
 
 		void Expand() {
-			coef->Append(T());
+			coef->Append(Complex());
 		}
 		operator string()
 		{
@@ -82,7 +85,7 @@ namespace Arithmetics {
 				polyPtr = new Polynom<T>(*this);
 			}
 
-			Sequence<T>* sumSeq = new ListSequence<T>();
+			Sequence<Complex>* sumSeq = new T();
 			for (int i = 0; i < polyPtr->GetLength(); i++) {
 				sumSeq->Append(tmp->Get(i) + polyPtr->Get(i));
 			}
@@ -99,11 +102,11 @@ namespace Arithmetics {
 			return *Add(poly);
 		}
 
-		Polynom<T>* Multiply(T number)
+		Polynom<T>* Multiply(Complex number)
 		{
 			//std::cout << "Multiplying by " << (std::string)number << std::endl;
-			Sequence<T>* newCoef = coef->Map(
-				[number](T a) -> T
+			Sequence<Complex>* newCoef = coef->Map(
+				[number](Complex a) -> Complex
 				{
 					return a * number;
 				}
@@ -111,7 +114,7 @@ namespace Arithmetics {
 			return new Polynom<T>(newCoef);
 		}
 
-		Polynom<T> operator * (T number)
+		Polynom<T> operator * (Complex number)
 		{
 			return *Multiply(number);
 		}
@@ -122,9 +125,9 @@ namespace Arithmetics {
 			int n = this->GetLength();
 			int m = poly.GetLength();
 
-			unique_ptr<T[]> newCoef = make_unique<T[]>(m + n);
+			unique_ptr<Complex[]> newCoef = make_unique<Complex[]>(m + n);
 			for (int i = 0; i < n + m; i++)
-				newCoef[i] = T();
+				newCoef[i] = Complex();
 
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < m; j++) {
@@ -144,17 +147,17 @@ namespace Arithmetics {
 			int n = this->GetLength();
 			int m = poly.GetLength();
 
-			unique_ptr<T[]> newCoef = make_unique<T[]>((m - 1) * (n - 1) + 1);
+			unique_ptr<Complex[]> newCoef = make_unique<Complex[]>((m - 1) * (n - 1) + 1);
 			newCoef[0] = this->Get(0);
 			for (int i = 1; i < (m - 1) * (n - 1) + 1; i++)
-				newCoef[i] = T();
+				newCoef[i] = Complex();
 
 			Polynom<T>* res = new Polynom<T>(newCoef.get(), (m - 1) * (n - 1) + 1);
 			//std::cout << "-----" << (string)*res << res->GetLength() << std::endl;
 			Polynom<T>* cur = new Polynom<T>();
 
 			for (int i = 1; i < n; i++) {
-				if (Get(i) != T()) {
+				if (Get(i) != Complex()) {
 					cur = new Polynom<T>(poly);
 					for (int j = 1; j < i; j++) {
 						*cur = (*cur) * (poly);
@@ -165,19 +168,16 @@ namespace Arithmetics {
 				}
 			}
 
-			return new Polynom(*res);
+			return new Polynom<T>(*res);
 		}
-		T Calculate(T value) {
-			T res;
+		Complex Calculate(Complex value) {
+			Complex res;
 			for (int i = 0; i < this->GetLength(); i++) {
 				res = res + Get(i) * power(value, i);
 			}
 			return res;
 		}
-		~Polynom()
-		{
-			//delete(coef);
-		}
+		
 	};
 
 }
